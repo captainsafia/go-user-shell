@@ -4,23 +4,22 @@ import "os"
 import "runtime"
 
 func GetUserShell() (string) {
-    if runtime.GOOS == "windows" {
-        if os.Getenv("COMSPEC") != "" {
-            return os.Getenv("COMSPEC")
-        } else {
+    switch runtime.GOOS {
+        case "windows":
+            if os.Getenv("COMSPEC") != "" {
+                return os.Getenv("COMSPEC")
+            }
             return "/cmd.exe"
-        }
-    } else if runtime.GOOS == "darwin" {
-        if os.Getenv("SHELL") != "" {
-            return os.Getenv("SHELL")
-        } else {
+        case "darwin":
+            if os.Getenv("SHELL") != "" {
+                return os.Getenv("SHELL")
+            }
             return "/bin/bash"
-        }
+        default:
+            if os.Getenv("SHELL") != "" {
+                return os.Getenv("SHELL")
+            }
+            return "/bin/sh"
     }
-    if os.Getenv("SHELL") != "" {
-        return os.Getenv("SHELL")
-    } else {
-        return "/bin/sh"
-    }
-    return "";
+    return ""
 }
